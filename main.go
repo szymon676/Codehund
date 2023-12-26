@@ -3,26 +3,19 @@ package main
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/szymon676/codehund/api"
+	"github.com/szymon676/codehund/config"
+	"github.com/szymon676/codehund/service"
 )
 
 func main() {
+	opts := config.GetDatabaseConnectionOptions()
 	app := fiber.New()
-	handler := api.Handler{}
+	svc := service.NewUserService(opts)
+	handler := api.NewHandler(svc)
 
 	app.Get("/", handler.RenderIndex)
+	app.Get("/profile", handler.RenderProfile)
 	app.Post("/register", handler.Register)
-
-	// app.Post("/register")
-	// app.Post("/login")
-	// app.Get("/user/:id")
-
-	// app.Get("/posts")
-	// app.Post("/post")
-	// app.Delete("/post/:id")
-
-	// app.Post("/comment")
-	// app.Get("/comments/:id")
-	// app.Delete("/comment/:id")
 
 	app.Listen(":3000")
 }

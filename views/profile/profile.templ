@@ -1,0 +1,23 @@
+package profile
+
+import (
+    "github.com/szymon676/codehund/types"
+    "github.com/szymon676/codehund/views/components"
+)
+templ Show(userstate *types.Userstate) {
+    <head>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
+    </head>
+    
+    <html>
+        @components.Header()
+        <body class="dark:bg-black text-white flex flex-col justify-center items-center min-h-screen">
+
+        if userstate.Loggedin {
+            <h1 class="text-3xl font-bold">You are not logged in! </h1>
+            @components.RegisterForm()
+        }
+        </body> 
+    </html>
+}
