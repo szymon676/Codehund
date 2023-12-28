@@ -1,0 +1,19 @@
+package register
+
+import "github.com/szymon676/codehund/views/components"
+
+templ Show() {
+        <head>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
+        <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    </head>
+
+    <body class="dark:bg-black text-white flex flex-col justify-center items-center min-h-screen">
+        <div class="max-w-md mx-auto p-8 bg-black shadow-lg rounded-xl">
+             <h1 class="text-2xl font-semibold mb-4">You are not logged in</h1>
+             @components.RegisterForm()
+             <h2> or <a href="/login" class="text-black bg-white">login</a></h2>
+        </div>
+     </body>
+}
