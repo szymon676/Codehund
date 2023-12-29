@@ -6,16 +6,16 @@ import (
 
 templ Show(username string) {
     <head>
-        <script src="https://cdn.tailwindcss.com"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
         <script src="https://unpkg.com/htmx.org@1.9.10"></script>
     </head>
-    
+    @components.Head()
     <html>
         @components.Header()
         <body class="dark:bg-black text-white flex flex-col justify-center items-center min-h-screen">
-            <h1> Hello {username} </h1>
-            <button class="text-white bg-gray-800 p-2 rounded outline mt-4" hx-post="/logout">Logout</button>
+            <h1>Hello { username }</h1>
+            <form action="/logout" method="POST"> 
+                <button class="text-white bg-gray-800 p-2 rounded outline mt-4" type="submit">Logout</button>
+            </form>
         </body> 
     </html>
 }
