@@ -19,14 +19,9 @@ type User struct {
 	Password string `json:"password,omitempty"`
 }
 
-type Userstate struct {
-	Loggedin bool
-	User     *User
-}
-
 type Post struct {
-	Title     string
-	Content   string
-	CreatedBy uint
-	Author    string
+	ID      int    `json:"id"`
+	Title   string `json:"title"`
+	Content string `json:"content"`
+	Author  string `json:"author"`
 }

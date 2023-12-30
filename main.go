@@ -14,9 +14,9 @@ func main() {
 
 	psqldb := db.NewPostgresDatabase(psqlopts)
 	rdb := db.NewRedisClient(rdbopts)
-
 	svc := service.NewUserService(psqldb)
 	session := auth.NewSessionManager(rdb, psqldb)
+
 	handler := api.NewHandler(svc, session)
 	handler.InitRoutes()
 }
