@@ -1,14 +1,15 @@
 package db
 
 import (
+	"database/sql"
 	"fmt"
 	"log"
 
-	"github.com/jmoiron/sqlx"
+	_ "github.com/lib/pq"
 	"github.com/szymon676/codehund/types"
 )
 
-func migrateSchemas(db *sqlx.DB) error {
+func migrateSchemas(db *sql.DB) error {
 	userschema := `
 	CREATE TABLE IF NOT EXISTS users (
 		id SERIAL PRIMARY KEY,
@@ -37,9 +38,14 @@ func migrateSchemas(db *sqlx.DB) error {
 	return nil
 }
 
-func NewPostgresDatabase(connopts *types.PostgresConnectionOptions) *sqlx.DB {
+func NewPostgresDatabase(connopts *types.PostgresConnectionOptions) *sql.DB {
 	connstring := fmt.Sprintf("port=%s user=%s dbname=%s password=%s sslmode=disable", connopts.Port, connopts.User, connopts.DatabaseName, connopts.Password)
-	db, err := sqlx.Connect("postgres", connstring)
+	db, err := sql.Open("postgres", connstring)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	err = db.Ping()
 	if err != nil {
 		log.Fatalln(err)
 	}

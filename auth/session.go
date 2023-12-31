@@ -2,11 +2,11 @@ package auth
 
 import (
 	"context"
+	"database/sql"
 	"encoding/json"
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/jmoiron/sqlx"
 	"github.com/redis/go-redis/v9"
 	"github.com/szymon676/codehund/types"
 	"golang.org/x/crypto/bcrypt"
@@ -14,7 +14,7 @@ import (
 
 type SessionManager struct {
 	client *redis.Client
-	db     *sqlx.DB
+	db     *sql.DB
 }
 
 type UserSession struct {
@@ -23,7 +23,7 @@ type UserSession struct {
 	Email    string
 }
 
-func NewSessionManager(client *redis.Client, db *sqlx.DB) *SessionManager {
+func NewSessionManager(client *redis.Client, db *sql.DB) *SessionManager {
 	return &SessionManager{
 		client: client,
 		db:     db,
@@ -42,7 +42,7 @@ func (s *SessionManager) GenerateSession(data *types.User) (string, error) {
 
 func (s *SessionManager) Login(email, password string) (string, error) {
 	var user types.User
-	err := s.db.Get(&user, "SELECT id, username, email, password FROM users WHERE email = $1", email)
+	err := s.db.QueryRow("SELECT id, username, email, password FROM users WHERE email = $1", email).Scan(&user.ID, &user.Username, &user.Email, &user.Password)
 	if err != nil {
 		return "", err
 	}
@@ -83,5 +83,4 @@ func (s *SessionManager) GetSession(session string) (*UserSession, error) {
 	}
 
 	return &userSession, nil
-
 }

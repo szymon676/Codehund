@@ -15,10 +15,8 @@ func (h *Handler) renderIndex(c *fiber.Ctx) error {
 }
 
 func (h *Handler) renderProfile(c *fiber.Ctx) error {
-	if h.sessionid == "" {
-		return c.Redirect("/login")
-	}
-	user, err := h.sm.GetSession(h.sessionid)
+	sessionID := c.Cookies(sessionCookieName)
+	user, err := h.sm.GetSession(sessionID)
 	if err != nil {
 		return c.Redirect("/login")
 	}
@@ -30,9 +28,6 @@ func (h *Handler) renderRegister(c *fiber.Ctx) error {
 }
 
 func (h *Handler) renderLogin(c *fiber.Ctx) error {
-	if h.sessionid != "" {
-		c.Redirect("/profile")
-	}
 	return render(c, login.Show())
 }
 

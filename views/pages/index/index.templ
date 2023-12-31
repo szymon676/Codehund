@@ -10,9 +10,11 @@ templ Show() {
 
     <html>
         @components.Header()
-        <body class="dark:bg-black text-white flex flex-col justify-center items-center min-h-screen">
-            <div class="max-w-md mx-auto p-8 bg-black shadow-lg rounded-xl">
+        <body class="bg-white text-black flex flex-col justify-center items-center min-h-screen">
+            <div class="max-w-md mx-auto p-8 bg-white shadow-lg rounded-xl">
                 <h1 class="text-2xl font-semibold mb-4">Hello, Welcome to the Codehund</h1>
+                <h2 class="text-2xl">Create your first post</h2>
+                @components.CreatePostForm()
             </div>
         </body>
     </html>

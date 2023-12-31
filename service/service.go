@@ -1,43 +1,53 @@
 package service
 
 import (
+	"database/sql"
 	"errors"
 	"strings"
 
-	"github.com/jmoiron/sqlx"
-	_ "github.com/lib/pq"
-	"golang.org/x/crypto/bcrypt"
-
 	"github.com/szymon676/codehund/types"
+	"golang.org/x/crypto/bcrypt"
 )
 
-type UserServicer interface {
+type Servicer interface {
 	CreateUser(*types.User) error
+	CreatePost(*types.Post) error
 }
 
-type UserService struct {
-	db *sqlx.DB
+type Service struct {
+	db *sql.DB
 }
 
-func NewUserService(db *sqlx.DB) *UserService {
-	return &UserService{
+func NewService(db *sql.DB) *Service {
+	return &Service{
 		db: db,
 	}
 }
 
-func (s *UserService) CreateUser(userin *types.User) error {
+func (s *Service) CreatePost(post *types.Post) error {
+	_, err := s.db.Exec("insert into posts (author, title, content) values ($1, $2, $3)", post.Author, post.Title, post.Content)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *Service) CreateUser(userin *types.User) error {
 	err := checkUserStruct(userin)
 	if err != nil {
 		return err
 	}
+
 	user, err := correctUserStruct(userin)
 	if err != nil {
 		return err
 	}
-	_, err = s.db.Exec("insert into users (username, email, password) values ($1, $2, $3)", user.Username, user.Email, user.Password)
+
+	_, err = s.db.Exec("INSERT INTO users (username, email, password) VALUES ($1, $2, $3)", user.Username, user.Email, user.Password)
 	if err != nil {
 		return err
 	}
+
 	return nil
 }
 
@@ -68,6 +78,7 @@ func correctUserStruct(user *types.User) (*types.User, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	return &types.User{
 		Username: strings.TrimSpace(user.Username),
 		Email:    strings.TrimSpace(user.Email),
