@@ -12,6 +12,7 @@ import (
 type Servicer interface {
 	CreateUser(*types.User) error
 	CreatePost(*types.Post) error
+	GetPosts() ([]types.Post, error)
 }
 
 type Service struct {
@@ -25,11 +26,29 @@ func NewService(db *sql.DB) *Service {
 }
 
 func (s *Service) CreatePost(post *types.Post) error {
-	_, err := s.db.Exec("insert into posts (author, title, content) values ($1, $2, $3)", post.Author, post.Title, post.Content)
+	_, err := s.db.Exec("insert into posts (author, content, date) values ($1, $2, $3)", post.Author, post.Content, post.Date)
 	if err != nil {
 		return err
 	}
 	return nil
+}
+
+func (s *Service) GetPosts() ([]types.Post, error) {
+	res, err := s.db.Query("select * from posts")
+	if err != nil {
+		return nil, err
+	}
+	defer res.Close()
+	var posts []types.Post
+	for res.Next() {
+		var post types.Post
+		err := res.Scan(&post.ID, &post.Author, &post.Content, &post.Date)
+		if err != nil {
+			return nil, err
+		}
+		posts = append(posts, post)
+	}
+	return posts, nil
 }
 
 func (s *Service) CreateUser(userin *types.User) error {

@@ -22,8 +22,8 @@ func migrateSchemas(db *sql.DB) error {
 	CREATE TABLE IF NOT EXISTS posts (
 		id SERIAL PRIMARY KEY,
 		author TEXT,
-		title TEXT,
-		content TEXT
+		content TEXT,
+		date TIMESTAMP
 	);
 	`
 	_, err := db.Exec(userschema)

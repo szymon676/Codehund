@@ -11,7 +11,11 @@ import (
 )
 
 func (h *Handler) renderIndex(c *fiber.Ctx) error {
-	return render(c, index.Show())
+	posts, err := h.svc.GetPosts()
+	if err != nil {
+		return err
+	}
+	return render(c, index.Show(posts))
 }
 
 func (h *Handler) renderProfile(c *fiber.Ctx) error {

@@ -1,6 +1,10 @@
 package api
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"os"
+
+	"github.com/gofiber/fiber/v2"
+)
 
 func (h *Handler) withAuth(next fiber.Handler) fiber.Handler {
 	return func(c *fiber.Ctx) error {
@@ -25,5 +29,5 @@ func (h *Handler) InitRoutes() {
 
 	app.Post("/posts", h.createPost)
 
-	app.Listen(":3000")
+	app.Listen(os.Getenv("SERVER_PORT"))
 }

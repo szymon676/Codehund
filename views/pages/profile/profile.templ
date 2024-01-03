@@ -11,10 +11,10 @@ templ Show(username string) {
     @components.Head()
     <html>
         @components.Header()
-        <body class="dark:bg-black text-white flex flex-col justify-center items-center min-h-screen">
+        <body class="dark:bg-white text-black flex flex-col justify-center items-center min-h-screen">
             <h1>Hello { username }</h1>
             <form action="/logout" method="POST"> 
-                <button class="text-white bg-gray-800 p-2 rounded outline mt-4" type="submit">Logout</button>
+                <button class="text-white bg-blue-700 p-2 rounded outline mt-4" type="submit">Logout</button>
             </form>
         </body> 
     </html>
