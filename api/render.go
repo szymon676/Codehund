@@ -4,6 +4,7 @@ import (
 	"github.com/a-h/templ"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/adaptor"
+	"github.com/szymon676/codehund/auth"
 	"github.com/szymon676/codehund/views/pages/index"
 	"github.com/szymon676/codehund/views/pages/login"
 	"github.com/szymon676/codehund/views/pages/profile"
@@ -11,11 +12,17 @@ import (
 )
 
 func (h *Handler) renderIndex(c *fiber.Ctx) error {
+	sessionID := c.Cookies(sessionCookieName)
+	user, err := h.sm.GetSession(sessionID)
+	if err != nil {
+		user = new(auth.UserSession)
+		user.Username = ""
+	}
 	posts, err := h.svc.GetPosts()
 	if err != nil {
 		return err
 	}
-	return render(c, index.Show(posts))
+	return render(c, index.Show(posts, user.Username))
 }
 
 func (h *Handler) renderProfile(c *fiber.Ctx) error {

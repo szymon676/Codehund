@@ -12,6 +12,7 @@ import (
 type Servicer interface {
 	CreateUser(*types.User) error
 	CreatePost(*types.Post) error
+	DeletePost(int) error
 	GetPosts() ([]types.Post, error)
 }
 
@@ -26,7 +27,11 @@ func NewService(db *sql.DB) *Service {
 }
 
 func (s *Service) CreatePost(post *types.Post) error {
-	_, err := s.db.Exec("insert into posts (author, content, date) values ($1, $2, $3)", post.Author, post.Content, post.Date)
+	err := checkPostStruct(post)
+	if err != nil {
+		return err
+	}
+	_, err = s.db.Exec("insert into posts (author, content, date) values ($1, $2, $3)", post.Author, post.Content, post.Date)
 	if err != nil {
 		return err
 	}
@@ -51,6 +56,18 @@ func (s *Service) GetPosts() ([]types.Post, error) {
 	return posts, nil
 }
 
+func (s *Service) DeletePost(id int) error {
+	res, err := s.db.Exec("delete from posts where id = $1", id)
+	if err != nil {
+		return err
+	}
+	rf, err := res.RowsAffected()
+	if rf == 0 || err != nil {
+		return errors.New("error deleting posts")
+	}
+	return nil
+}
+
 func (s *Service) CreateUser(userin *types.User) error {
 	err := checkUserStruct(userin)
 	if err != nil {
@@ -67,6 +84,13 @@ func (s *Service) CreateUser(userin *types.User) error {
 		return err
 	}
 
+	return nil
+}
+
+func checkPostStruct(post *types.Post) error {
+	if len(strings.TrimSpace(post.Content)) < 3 {
+		return errors.New("post content is to short, minimum 3 characters")
+	}
 	return nil
 }
 

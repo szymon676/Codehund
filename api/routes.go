@@ -18,6 +18,7 @@ func (h *Handler) withAuth(next fiber.Handler) fiber.Handler {
 
 func (h *Handler) InitRoutes() {
 	app := fiber.New()
+
 	app.Get("/", h.renderIndex)
 	app.Get("/profile", h.withAuth(h.renderProfile))
 	app.Get("/login", h.renderLogin)
@@ -28,6 +29,7 @@ func (h *Handler) InitRoutes() {
 	app.Post("/logout", h.logout)
 
 	app.Post("/posts", h.createPost)
+	app.Delete("/posts/:postid", h.deletePost)
 
 	app.Listen(os.Getenv("SERVER_PORT"))
 }
