@@ -27,9 +27,13 @@ func (h *Handler) InitRoutes() {
 	app.Post("/register", h.register)
 	app.Post("/login", h.login)
 	app.Post("/logout", h.logout)
-
 	app.Post("/posts", h.createPost)
+
 	app.Delete("/posts/:postid", h.deletePost)
 
-	app.Listen(os.Getenv("SERVER_PORT"))
+	port := os.Getenv("SERVER_PORT")
+	if port == "" {
+		port = ":3000"
+	}
+	app.Listen(port)
 }

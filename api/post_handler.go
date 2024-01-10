@@ -1,7 +1,6 @@
 package api
 
 import (
-	"log"
 	"strconv"
 	"time"
 
@@ -23,7 +22,7 @@ func (h *Handler) createPost(c *fiber.Ctx) error {
 	}
 	err = h.svc.CreatePost(post)
 	if err != nil {
-		return c.Redirect("/")
+		return c.SendString("Could not create post. Please try again")
 	}
 	return c.Redirect("/")
 }
@@ -37,11 +36,11 @@ func (h *Handler) deletePost(c *fiber.Ctx) error {
 	postID := c.Params("postid")
 	convpostID, err := strconv.Atoi(postID)
 	if err != nil {
-		return c.Redirect("/")
+		return c.SendString("Error, did not get post id properly.")
 	}
 	err = h.svc.DeletePost(convpostID)
 	if err != nil {
-		log.Println(err)
+		return c.Status(fiber.StatusInternalServerError).SendString("Error deleting post, please try again.")
 	}
 	return c.Redirect("/")
 }

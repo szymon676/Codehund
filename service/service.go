@@ -62,8 +62,11 @@ func (s *Service) DeletePost(id int) error {
 		return err
 	}
 	rf, err := res.RowsAffected()
-	if rf == 0 || err != nil {
-		return errors.New("error deleting posts")
+	if err != nil {
+		return err
+	}
+	if rf == 0 {
+		return errors.New("post not found")
 	}
 	return nil
 }
