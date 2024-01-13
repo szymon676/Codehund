@@ -83,7 +83,7 @@ func RenderPost(post types.Post, username string) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><i class=\"fa fa-trash text-xl\" hx-></i></button>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-swap=\"outerHTML\"><i class=\"fa fa-trash text-xl\" hx-></i></button><p id=\"lol\"></p>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -95,7 +95,7 @@ func RenderPost(post types.Post, username string) templ.Component {
 		var templ_7745c5c3_Var3 string
 		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(post.Content)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/render_posts.templ`, Line: 46, Col: 45}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/render_posts.templ`, Line: 47, Col: 45}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
@@ -113,7 +113,7 @@ func RenderPost(post types.Post, username string) templ.Component {
 		var templ_7745c5c3_Var5 string
 		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(formatTimeDifference(post.Date))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/render_posts.templ`, Line: 47, Col: 89}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/render_posts.templ`, Line: 48, Col: 89}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 		if templ_7745c5c3_Err != nil {

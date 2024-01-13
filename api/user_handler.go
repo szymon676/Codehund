@@ -20,7 +20,7 @@ func (h *Handler) register(c *fiber.Ctx) error {
 
 	err := h.svc.CreateUser(user)
 	if err != nil {
-		c.SendString("Could not register user")
+		c.Status(fiber.StatusInternalServerError).SendString("Could not register user")
 	}
 
 	return c.Redirect("/login")

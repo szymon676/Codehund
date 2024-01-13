@@ -42,5 +42,5 @@ func (h *Handler) deletePost(c *fiber.Ctx) error {
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).SendString("Error deleting post, please try again.")
 	}
-	return c.Redirect("/")
+	return c.SendString("post deleted succesfuly")
 }
