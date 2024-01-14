@@ -26,11 +26,24 @@ func migrateSchemas(db *sql.DB) error {
 		date TIMESTAMP
 	);
 	`
+	followerschema := `
+	CREATE TABLE followers (
+		follower INT,
+		followee INT,
+		PRIMARY KEY (follower, followee),
+		FOREIGN KEY (follower) REFERENCES users(id),
+		FOREIGN KEY (followee) REFERENCES users(id)
+	);
+	`
 	_, err := db.Exec(userschema)
 	if err != nil {
 		return err
 	}
 	_, err = db.Exec(postschema)
+	if err != nil {
+		return err
+	}
+	_, err = db.Exec(followerschema)
 	if err != nil {
 		return err
 	}
@@ -52,7 +65,7 @@ func NewPostgresDatabase(connopts *types.PostgresConnectionOptions) *sql.DB {
 
 	err = migrateSchemas(db)
 	if err != nil {
-		log.Fatalln(err)
+		log.Println(err)
 	}
 
 	return db

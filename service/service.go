@@ -10,6 +10,9 @@ import (
 )
 
 type Servicer interface {
+	GetUserByUsername(string) (*types.User, error)
+	FollowUser(int, int) error
+	UnfollowUser(int, int) error
 	CreateUser(*types.User) error
 	CreatePost(*types.Post) error
 	DeletePost(int) error
@@ -24,6 +27,43 @@ func NewService(db *sql.DB) *Service {
 	return &Service{
 		db: db,
 	}
+}
+
+func (s *Service) GetUserByUsername(username string) (*types.User, error) {
+	row, err := s.db.Query("SELECT id, username, email, password FROM users WHERE username = $1", username)
+	if err != nil {
+		return nil, err
+	}
+	defer row.Close()
+
+	var user types.User
+	if row.Next() {
+		err = row.Scan(&user.ID, &user.Username, &user.Email, &user.Password)
+		if err != nil {
+			return nil, err
+		}
+	}
+	user.Password = ""
+	if user.Username == "" {
+		return nil, errors.New("user not found")
+	}
+	return &user, nil
+}
+
+func (s *Service) FollowUser(follower int, followee int) error {
+	_, err := s.db.Exec("INSERT INTO followers (follower, followee) VALUES ($1, $2)", follower, followee)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *Service) UnfollowUser(follower int, followee int) error {
+	_, err := s.db.Exec("DELETE FROM followers WHERE follower=$1 AND followee=$2", follower, followee)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (s *Service) CreatePost(post *types.Post) error {

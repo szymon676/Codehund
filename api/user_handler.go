@@ -1,6 +1,8 @@
 package api
 
 import (
+	"strconv"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/szymon676/codehund/types"
 )
@@ -57,4 +59,24 @@ func (h *Handler) logout(c *fiber.Ctx) error {
 	})
 
 	return c.Redirect("/login")
+}
+
+// todo
+func (h *Handler) follow(c *fiber.Ctx) error {
+	follower := c.FormValue("follower")
+	followee := c.FormValue("followee")
+
+	convFollower, _ := strconv.Atoi(follower)
+	convFollowee, _ := strconv.Atoi(followee)
+
+	err := h.svc.FollowUser(convFollower, convFollowee)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString("could not followe user.")
+	}
+
+	return c.SendString("followed user")
+}
+
+func (h *Handler) unfollow(c *fiber.Ctx) error {
+	return nil
 }

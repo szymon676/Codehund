@@ -7,8 +7,10 @@ import (
 	"github.com/szymon676/codehund/auth"
 	"github.com/szymon676/codehund/views/pages/index"
 	"github.com/szymon676/codehund/views/pages/login"
+	"github.com/szymon676/codehund/views/pages/notfound"
 	"github.com/szymon676/codehund/views/pages/profile"
 	"github.com/szymon676/codehund/views/pages/register"
+	"github.com/szymon676/codehund/views/pages/user"
 )
 
 func (h *Handler) renderIndex(c *fiber.Ctx) error {
@@ -40,6 +42,15 @@ func (h *Handler) renderRegister(c *fiber.Ctx) error {
 
 func (h *Handler) renderLogin(c *fiber.Ctx) error {
 	return render(c, login.Show())
+}
+
+func (h *Handler) renderUserByUsername(c *fiber.Ctx) error {
+	username := c.Params("username")
+	userstruct, err := h.svc.GetUserByUsername(username)
+	if err != nil {
+		return render(c, notfound.Show())
+	}
+	return render(c, user.Show(userstruct.Username))
 }
 
 func render(c *fiber.Ctx, component templ.Component, options ...func(*templ.ComponentHandler)) error {
