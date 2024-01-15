@@ -41,7 +41,6 @@ templ RenderPost(post types.Post, username string) {
             <div hx-confirm="Are you sure you want to delete this post?">
                 if username != "" {
                     <button type="button" hx-delete={"/posts/" + fmt.Sprintf("%d",post.ID)} hx-swap="outerHTML"><i class="fa fa-trash text-xl" hx-></i></button>
-					<p id="lol"></p>
 				}
             </div>
         </div>

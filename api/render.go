@@ -8,7 +8,6 @@ import (
 	"github.com/szymon676/codehund/views/pages/index"
 	"github.com/szymon676/codehund/views/pages/login"
 	"github.com/szymon676/codehund/views/pages/notfound"
-	"github.com/szymon676/codehund/views/pages/profile"
 	"github.com/szymon676/codehund/views/pages/register"
 	"github.com/szymon676/codehund/views/pages/user"
 )
@@ -25,15 +24,6 @@ func (h *Handler) renderIndex(c *fiber.Ctx) error {
 		return err
 	}
 	return render(c, index.Show(posts, user.Username))
-}
-
-func (h *Handler) renderProfile(c *fiber.Ctx) error {
-	sessionID := c.Cookies(sessionCookieName)
-	user, err := h.sm.GetSession(sessionID)
-	if err != nil {
-		return c.Redirect("/login")
-	}
-	return render(c, profile.Show(user.Username))
 }
 
 func (h *Handler) renderRegister(c *fiber.Ctx) error {

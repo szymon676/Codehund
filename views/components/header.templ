@@ -1,11 +1,18 @@
 package components
 
-templ Header() {
+templ Header(username string) {
     <header class="top-0 left-12 absolute text-black p-4">
-        <div class="flex items-center justify-between gap-2">
-            <nav class="flex space-x-4">
+        <div class="flex justify-between items-center gap-2">
+            <nav class="flex space-x-4 items-center">
                 <a href="/" class="hover:text-gray-300 text-4xl"><i class="fa fa-home"></i></a>
-                <a href="/profile" class="hover:text-gray-300 text-3xl font-bold"><i class="fa fa-male"></i></a>
+                if username != "" {
+                    <a href={templ.URL("/profile/" + username)} class="hover:text-gray-300 text-4xl"><i class="fa fa-male"></i></a>
+                    <form action="/logout" method="POST"> 
+                        <button class="text-white bg-blue-700 px-4 py-2 rounded outline ml-auto" type="submit">Logout</button>
+                    </form>
+                } else {
+                    <button class="text-white bg-black px-4 py-2 rounded outline ml-auto"><a href="/login">Login</a></button>
+                }
             </nav>
         </div>
     </header>

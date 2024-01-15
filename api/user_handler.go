@@ -41,7 +41,7 @@ func (h *Handler) login(c *fiber.Ctx) error {
 		Value: sessionID,
 	})
 
-	return c.Redirect("/profile")
+	return c.Redirect("/")
 }
 
 func (h *Handler) logout(c *fiber.Ctx) error {

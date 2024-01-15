@@ -20,14 +20,14 @@ func (h *Handler) InitRoutes() {
 	app := fiber.New()
 
 	app.Get("/", h.renderIndex)
-	app.Get("/:username", h.renderUserByUsername)
-	// app.Get("/profile", h.withAuth(h.renderProfile))
+	app.Get("/profile/:username", h.renderUserByUsername)
 	app.Get("/login", h.renderLogin)
 	app.Get("/register", h.renderRegister)
 
 	app.Post("/register", h.register)
 	app.Post("/login", h.login)
 	app.Post("/logout", h.logout)
+
 	app.Post("/posts", h.createPost)
 
 	app.Delete("/posts/:postid", h.deletePost)
