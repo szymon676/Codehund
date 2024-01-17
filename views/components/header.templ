@@ -7,9 +7,6 @@ templ Header(username string) {
                 <a href="/" class="hover:text-gray-300 text-4xl"><i class="fa fa-home"></i></a>
                 if username != "" {
                     <a href={templ.URL("/profile/" + username)} class="hover:text-gray-300 text-4xl"><i class="fa fa-male"></i></a>
-                    <form action="/logout" method="POST"> 
-                        <button class="text-white bg-blue-700 px-4 py-2 rounded outline ml-auto" type="submit">Logout</button>
-                    </form>
                 } else {
                     <button class="text-white bg-black px-4 py-2 rounded outline ml-auto"><a href="/login">Login</a></button>
                 }
