@@ -40,7 +40,13 @@ func (h *Handler) renderUserByUsername(c *fiber.Ctx) error {
 	if err != nil {
 		return render(c, notfound.Show())
 	}
-	return render(c, user.Show(userstruct.Username))
+	sessionID := c.Cookies(sessionCookieName)
+	seeingUser, err := h.sm.GetSession(sessionID)
+	if err != nil {
+		seeingUser = new(auth.UserSession)
+		seeingUser.Username = ""
+	}
+	return render(c, user.Show(userstruct.Username, seeingUser.Username))
 }
 
 func render(c *fiber.Ctx, component templ.Component, options ...func(*templ.ComponentHandler)) error {

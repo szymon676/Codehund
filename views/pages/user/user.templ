@@ -1,5 +1,13 @@
 package user
 
-templ Show(username string) {
-    {username}
+import "github.com/szymon676/codehund/views/components"
+
+templ Show(username string, seeingUsername string) {
+    @components.Head()
+    <html>
+        @components.Header(seeingUsername)
+        <body>
+            <h1>{username}</h1>
+        </body>
+    </html>
 }

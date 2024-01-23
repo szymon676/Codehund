@@ -32,16 +32,19 @@ func (h *Handler) login(c *fiber.Ctx) error {
 	email := c.FormValue("email")
 	password := c.FormValue("password")
 	sessionID, err := h.sm.Login(email, password)
+
 	if err != nil {
-		c.SendString("error while logging in.")
+		c.Redirect("/login")
+	} else {
+
+		c.Cookie(&fiber.Cookie{
+			Name:  sessionCookieName,
+			Value: sessionID,
+		})
+
+		return c.Redirect("/")
 	}
-
-	c.Cookie(&fiber.Cookie{
-		Name:  sessionCookieName,
-		Value: sessionID,
-	})
-
-	return c.Redirect("/")
+	return nil
 }
 
 func (h *Handler) logout(c *fiber.Ctx) error {
@@ -58,7 +61,7 @@ func (h *Handler) logout(c *fiber.Ctx) error {
 		MaxAge: -1,
 	})
 
-	return c.Redirect("/login")
+	return c.SendString("logged out")
 }
 
 // todo

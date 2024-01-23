@@ -6,12 +6,7 @@ import (
 )
 
 templ Show(posts []types.Post, username string) {
-	<head>
-		<script src="https://cdn.tailwindcss.com"></script>
-		<script src="https://unpkg.com/htmx.org@1.9.8/dist/htmx.min.js"></script>
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
-	</head>
-
+	@components.Head()
 	<html>
 		@components.Header(username)
 		<body class="bg-white text-black flex flex-col justify-center items-center min-h-screen">
