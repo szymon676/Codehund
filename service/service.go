@@ -13,6 +13,7 @@ type Servicer interface {
 	GetUserByUsername(string) (*types.User, error)
 	FollowUser(int, int) error
 	UnfollowUser(int, int) error
+	GetFollowers(int) ([]string, error)
 	CreateUser(*types.User) error
 	CreatePost(*types.Post) error
 	DeletePost(int) error
@@ -48,6 +49,65 @@ func (s *Service) GetUserByUsername(username string) (*types.User, error) {
 		return nil, errors.New("user not found")
 	}
 	return &user, nil
+}
+
+func (s *Service) getUserByID(id int) (*types.User, error) {
+	row, err := s.db.Query("SELECT id, username, email, password FROM users WHERE id= $1", id)
+	if err != nil {
+		return nil, err
+	}
+	defer row.Close()
+
+	var user types.User
+	if row.Next() {
+		err = row.Scan(&user.ID, &user.Username, &user.Email, &user.Password)
+		if err != nil {
+			return nil, err
+		}
+	}
+	user.Password = ""
+	if user.Username == "" {
+		return nil, errors.New("user not found")
+	}
+	return &user, nil
+}
+
+func (s *Service) GetFollowers(user int) ([]string, error) {
+	rows, err := s.db.Query("SELECT followee FROM followers WHERE follower = $1", user)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var followers []string
+	for rows.Next() {
+		var followeeID int
+		if err := rows.Scan(&followeeID); err != nil {
+			return nil, err
+		}
+
+		id := followeeID
+		if err != nil {
+			return nil, err
+		}
+
+		user, err := s.getUserByID(id)
+		if err != nil {
+			return nil, err
+		}
+
+		followers = append(followers, user.Username)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return followers, nil
+}
+
+func GetFollowees(user int) ([]string, error) {
+	return nil, nil
 }
 
 func (s *Service) FollowUser(follower int, followee int) error {

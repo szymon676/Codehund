@@ -2,12 +2,17 @@ package user
 
 import "github.com/szymon676/codehund/views/components"
 
-templ Show(username string, seeingUsername string) {
+templ Show(username string, seeingUsername string, followers int, followees int) {
     @components.Head()
-    <html>
-        @components.Header(seeingUsername)
-        <body>
-            <h1>{username}</h1>
-        </body>
-    </html>
+    @components.Header(seeingUsername)
+    <body class="bg-white text-black min-h-screen flex justify-center items-center">
+        <div style="text-align: center;">
+            <h1 class="text-3xl text-blue-400">{username}</h1>
+            <p>Followers: {string(followers)}</p> 
+            <p>Followees: {string(followees)}</p>
+            <form action="/follow" method="POST">
+                <button type="submit" class="bg-blue-700 text-white p-2 rounded cursor-pointer hover:focus:outline-none focus:ring focus:border-green-300">Follow</button>
+            </form>
+        </div>
+    </body>
 }

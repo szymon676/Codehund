@@ -46,7 +46,11 @@ func (h *Handler) renderUserByUsername(c *fiber.Ctx) error {
 		seeingUser = new(auth.UserSession)
 		seeingUser.Username = ""
 	}
-	return render(c, user.Show(userstruct.Username, seeingUser.Username))
+	followers, err := h.svc.GetFollowers(userstruct.ID)
+	if err != nil {
+		return err
+	}
+	return render(c, user.Show(userstruct.Username, seeingUser.Username, len(followers), 2))
 }
 
 func render(c *fiber.Ctx, component templ.Component, options ...func(*templ.ComponentHandler)) error {

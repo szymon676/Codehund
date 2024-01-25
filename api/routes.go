@@ -28,6 +28,8 @@ func (h *Handler) InitRoutes() {
 	app.Post("/login", h.login)
 	app.Post("/logout", h.logout)
 
+	app.Post("/follow", h.follow)
+
 	app.Post("/posts", h.createPost)
 
 	app.Delete("/posts/:postid", h.deletePost)
